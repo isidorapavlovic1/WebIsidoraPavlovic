@@ -1,0 +1,51 @@
+﻿@model WebIsidoraPavlovic.Models.Proizvod
+<link rel="stylesheet" href="~/css/Custom.css" asp-append-version="true" />
+
+@{
+    ViewData["Title"] = "Detalji o igrici";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0" style="max-width: 700px; margin: 0 auto;">
+        <div class="card-header bg-dark text-white text-center">
+            <h3>@Model.Ime</h3>
+        </div>
+
+        <div class="card-body text-center">
+            @if (Model.Slika != null)
+            {
+                string base64 = Convert.ToBase64String(Model.Slika);
+                string imgSrc = $"data:image/png;base64,{base64}";
+                <img src="@imgSrc" alt="@Model.Ime" class="img-fluid rounded mb-4" style="max-height: 350px;" />
+            }
+            else
+            {
+                <img src="/images/no-image.png" alt="Nema slike" class="img-fluid rounded mb-4" style="max-height: 350px;" />
+            }
+
+            <h4 class="text-primary">@Model.Tip</h4>
+            <p class="lead mt-3">@Model.Opis</p>
+
+            <h5 class="text-success mt-4">Cena: @Model.Cena.ToString("N2") RSD</h5>
+
+            @if (!User.IsInRole("ADMIN"))
+            {
+                <form asp-controller="Korpa" asp-action="DodajUKorpu" method="post" class="mt-3">
+                    <input type="hidden" name="proizvodId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-cart-plus"></i> Dodaj u korpu <i class="bi bi-bag-plus-fill"></i>
+                    </button>
+                </form>
+            }
+        </div>
+
+        <div class="card-footer text-center">
+            <a asp-action="Index" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Nazad na listu</a>
+            @if (User.IsInRole("ADMIN"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mx-1">Izmeni <i class="bi bi-pencil"></i></a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger mx-1">Obriši <i class="bi bi-trash3-fill"></i></a>
+            }
+        </div>
+    </div>
+</div>

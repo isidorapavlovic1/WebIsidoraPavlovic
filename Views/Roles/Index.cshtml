@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+<link rel="stylesheet" href="~/css/CustomRoles.css" asp-append-version="true" />
+
+<h1>Application role</h1>
+<p>
+    <a asp-action="Create"> Create new role <i class="bi bi-plus-circle"></i></a>
+</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>
+            <th>@Html.DisplayNameFor(model => model.NormalizedName)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelitem => item.Id)</td>
+                <td>@Html.DisplayFor(modelitem => item.Name)</td>
+                <td>@Html.DisplayFor(modelitem => item.NormalizedName)</td>
+            </tr>
+        }
+    </tbody>
+</table>

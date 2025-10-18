@@ -1,0 +1,70 @@
+﻿@model IEnumerable<WebIsidoraPavlovic.Models.KorpaItem>
+<link rel="stylesheet" href="~/css/CustomRoles.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/Custom.css" asp-append-version="true" />
+
+<h2>Vaša korpa</h2>
+
+@if (!Model.Any())
+{
+    <p>Korpa je prazna.</p>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Proizvod</th>
+                <th style="width:150px;">Količina</th>
+                <th>Cena</th>
+                <th>Ukupno</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr data-id="@item.Id">
+                    <td>@item.Proizvod.Ime</td>
+                    <td>
+                        <input type="number" class="form-control form-control-sm text-center kolicina-input"
+                               value="@item.Kolicina" min="1" style="width:70px;" />
+                    </td>
+                    <td class="cena">@item.Proizvod.Cena.ToString("N2")</td>
+                    <td class="ukupno">@item.Ukupno.ToString("N2")</td>
+                    <td>
+                        <a asp-action="Obrisi" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Ukloni</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4 class="text-end">Ukupno: <span id="ukupno">@ViewBag.Ukupno.ToString("N2")</span> RSD</h4>
+
+    <form asp-action="PotvrdiPorudzbinu" method="post" class="text-end">
+        <button type="submit" class="btn btn-success mt-2">Poruči</button>
+    </form>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function () {
+            $('.kolicina-input').on('change', function () {
+                var row = $(this).closest('tr');
+                var id = row.data('id');
+                var novaKolicina = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("AzurirajKolicinu", "Korpa")',
+                    type: 'POST',
+                    data: { id: id, novaKolicina: novaKolicina },
+                    success: function (data) {
+                        row.find('.ukupno').text(data.stavkaUkupno);
+                        $('#ukupno').text(data.ukupnoKorpa);
+                    }
+                });
+            });
+        });
+    </script>
+}

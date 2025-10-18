@@ -1,0 +1,28 @@
+﻿@model IEnumerable<WebIsidoraPavlovic.Models.ViewModels.UserRolesViewModel>
+<link rel="stylesheet" href="~/css/CustomRoles.css" asp-append-version="true" />
+
+<h1>Korisnici i uloge</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Korisnik</th>
+            <th>Email</th>
+            <th>Uloge</th>
+            <th>Akcija</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.UserName</td>
+                <td>@u.Email</td>
+                <td>@string.Join(", ", u.Roles)</td>
+                <td>
+                    <a asp-action="EditUserRole" asp-route-userId="@u.UserId" class="btn btn-sm btn-primary">Promeni uloge</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

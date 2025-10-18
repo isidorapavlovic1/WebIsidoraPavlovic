@@ -1,0 +1,32 @@
+﻿@model IEnumerable<WebIsidoraPavlovic.Models.Porudzbina>
+<link rel="stylesheet" href="~/css/CustomRoles.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/Custom.css" asp-append-version="true" />
+
+<h2>Moje porudžbine</h2>
+
+@if (!Model.Any())
+{
+    <p>Nemate ranijih porudžbina.</p>
+}
+else
+{
+    @foreach (var porudzbina in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-header bg-light">
+                <strong>Porudžbina #@porudzbina.Id</strong> —
+                @porudzbina.DatumPorudzbine.ToString("dd.MM.yyyy HH:mm")
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    @foreach (var s in porudzbina.Stavke)
+                    {
+                        <li>@s.Proizvod.Ime — @s.Kolicina × @s.Cena.ToString("N2") RSD</li>
+                    }
+                </ul>
+                <hr />
+                <strong>Ukupno: @porudzbina.UkupnaCena.ToString("N2") RSD</strong>
+            </div>
+        </div>
+    }
+}
